@@ -117,9 +117,8 @@ ppc_pit_hist <- function(pit, bins = 10L, prob = 0.95, ...) {
       linewidth  = 0.7
     ) +
     ggplot2::scale_x_continuous(
-      limits = c(0, 1),
       breaks = seq(0, 1, by = 0.25),
-      expand = c(0, 0)
+      expand = ggplot2::expansion(add = c(0.01, 0.01))
     ) +
     ggplot2::scale_y_continuous(
       expand = ggplot2::expansion(mult = c(0, 0.06))
