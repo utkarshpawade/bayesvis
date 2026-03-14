@@ -1,0 +1,38 @@
+Package: bayesvis
+Type: Package
+Title: Extended Bayesian Visualization Diagnostics
+Version: 0.1.0
+Authors@R:
+    person("Bayesvis", "Contributors",
+           email = "bayesvis@example.com",
+           role  = c("aut", "cre"))
+Description: An extension prototype for the 'bayesplot' package providing
+    advanced Bayesian visualization capabilities. Implements prior-to-posterior
+    shrinkage diagnostics (mcmc_shrinkage()), LOO probability integral transform
+    plots (ppc_loo_pit(), ppc_loo_pit_qq()), rank-based ECDF diagnostics
+    (mcmc_rank_ecdf()), and posterior predictive coverage plots (ppc_coverage()).
+    All plots return 'ggplot2' objects and integrate with 'bayesplot' themes
+    and color schemes, making bayesvis a natural companion to the bayesplot
+    workflow.
+License: GPL (>= 3)
+URL: https://github.com/example/bayesvis
+BugReports: https://github.com/example/bayesvis/issues
+Encoding: UTF-8
+LazyData: false
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Imports:
+    ggplot2 (>= 3.3.0),
+    bayesplot (>= 1.9.0),
+    rlang (>= 0.4.11),
+    tibble (>= 3.0.0),
+    stats,
+    utils
+Suggests:
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown,
+    mvtnorm,
+    loo
+VignetteBuilder: knitr
+Config/testthat/edition: 3

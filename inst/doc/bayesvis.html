@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>Extended Bayesian Visualization: Diagnostics Beyond Trace Plots</title>
+<style>
+body { font-family: sans-serif; max-width: 900px; margin: auto; padding: 2em; line-height: 1.6; }
+h1, h2, h3 { color: #2c3e50; }
+code { background: #f4f4f4; padding: 2px 4px; border-radius: 3px; font-size: 0.9em; }
+pre { background: #f4f4f4; padding: 1em; border-radius: 4px; overflow-x: auto; }
+blockquote { border-left: 4px solid #ccc; margin-left: 0; padding-left: 1em; color: #555; }
+</style>
+</head>
+<body>
+<h1>Extended Bayesian Visualization: Diagnostics Beyond Trace Plots</h1>
+<p><em>bayesvis — vignette</em></p>
+
+<blockquote>
+<p>This vignette is best viewed by building with <code>devtools::build_vignettes()</code>
+in an environment with Pandoc installed, or by running the Rmd file interactively
+in RStudio.</p>
+</blockquote>
+
+<h2>Overview</h2>
+<p>The <strong>bayesvis</strong> package extends
+<a href="https://mc-stan.org/bayesplot/">bayesplot</a>
+with diagnostic visualizations that complement the familiar trace plot.
+See <code>vignettes/bayesvis.Rmd</code> for the full source.</p>
+
+<h2>Functions</h2>
+<ul>
+  <li><code>mcmc_shrinkage()</code> — Prior-to-posterior shrinkage scatter</li>
+  <li><code>compute_shrinkage()</code> — Compute shrinkage factors from draws</li>
+  <li><code>ppc_loo_pit()</code> — LOO-PIT histogram with uniform band</li>
+  <li><code>ppc_loo_pit_qq()</code> — LOO-PIT Q-Q plot with Beta envelope</li>
+  <li><code>mcmc_rank_ecdf()</code> — Rank ECDF per chain with DKW bands</li>
+  <li><code>ppc_coverage()</code> — Posterior predictive coverage plot</li>
+</ul>
+
+<h2>References</h2>
+<p>Gabry et al. (2019). Visualization in Bayesian workflow. <em>JRSS-A</em>.
+<a href="https://doi.org/10.1111/rssa.12378">doi:10.1111/rssa.12378</a></p>
+
+<p>Vehtari et al. (2021). Rank-normalization, folding, and localization. <em>Bayesian Analysis</em>.
+<a href="https://doi.org/10.1214/20-BA1221">doi:10.1214/20-BA1221</a></p>
+</body>
+</html>
