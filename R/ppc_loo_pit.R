@@ -1,4 +1,4 @@
-#' LOO probability integral transform histogram
+#' LOO-PIT histogram (pre-computed PIT values)
 #'
 #' @description
 #' Plots the distribution of LOO probability integral transform (LOO-PIT)
@@ -40,18 +40,18 @@
 #'
 #' # Well-calibrated model: PIT values near Uniform(0,1)
 #' pit_good <- runif(200)
-#' ppc_loo_pit(pit_good)
+#' ppc_pit_hist(pit_good)
 #'
 #' # Over-dispersed model: PIT values concentrated near 0 and 1
 #' pit_over <- rbeta(200, shape1 = 0.4, shape2 = 0.4)
-#' ppc_loo_pit(pit_over)
+#' ppc_pit_hist(pit_over)
 #'
 #' # Under-dispersed model: PIT values concentrated near 0.5
 #' pit_under <- rbeta(200, shape1 = 4, shape2 = 4)
-#' ppc_loo_pit(pit_under)
+#' ppc_pit_hist(pit_under)
 #'
 #' @export
-ppc_loo_pit <- function(pit, bins = 10L, prob = 0.95, ...) {
+ppc_pit_hist <- function(pit, bins = 10L, prob = 0.95, ...) {
   pit <- validate_pit(pit)
   n   <- length(pit)
   K   <- as.integer(bins)
@@ -172,14 +172,14 @@ ppc_loo_pit <- function(pit, bins = 10L, prob = 0.95, ...) {
 #'
 #' # Well-calibrated model
 #' pit_good <- runif(150)
-#' ppc_loo_pit_qq(pit_good)
+#' ppc_pit_qq(pit_good)
 #'
 #' # Right-skewed PIT: model is over-confident
 #' pit_skewed <- rbeta(150, shape1 = 2, shape2 = 0.8)
-#' ppc_loo_pit_qq(pit_skewed, prob = 0.99)
+#' ppc_pit_qq(pit_skewed, prob = 0.99)
 #'
 #' @export
-ppc_loo_pit_qq <- function(pit, prob = 0.95, ...) {
+ppc_pit_qq <- function(pit, prob = 0.95, ...) {
   pit <- validate_pit(pit)
   n   <- length(pit)
 

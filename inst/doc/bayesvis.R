@@ -11,8 +11,9 @@ set.seed(42)
 
 
 ## ----load---------------------------------------------------------------------
-library(bayesvis)
+# Load bayesplot first so bayesvis functions take precedence in the search path
 library(bayesplot)
+library(bayesvis)
 
 # Use a muted color scheme throughout
 color_scheme_set("blue")
@@ -90,23 +91,23 @@ round(kappa, 3)
 
 
 ## ----pit-good-----------------------------------------------------------------
-ppc_loo_pit(pit_good)
+ppc_pit_hist(pit_good)
 
 
 ## ----pit-over-----------------------------------------------------------------
-ppc_loo_pit(pit_over, bins = 12L)
+ppc_pit_hist(pit_over, bins = 12L)
 
 
 ## ----pit-under----------------------------------------------------------------
-ppc_loo_pit(pit_under, bins = 12L)
+ppc_pit_hist(pit_under, bins = 12L)
 
 
 ## ----pit-qq-good--------------------------------------------------------------
-ppc_loo_pit_qq(pit_good)
+ppc_pit_qq(pit_good)
 
 
 ## ----pit-qq-over--------------------------------------------------------------
-ppc_loo_pit_qq(pit_over)
+ppc_pit_qq(pit_over)
 
 
 ## ----rank-good----------------------------------------------------------------
@@ -135,7 +136,7 @@ ppc_coverage(y, yrep_good, sort_by = "mean")
 
 ## ----color-schemes, fig.width = 7, fig.height = 3.5---------------------------
 color_scheme_set("red")
-ppc_loo_pit(pit_under)
+ppc_pit_hist(pit_under)
 
 
 ## ----reset-scheme, include = FALSE--------------------------------------------

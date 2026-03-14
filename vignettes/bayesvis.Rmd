@@ -30,8 +30,9 @@ with *known* properties—some well-behaved, some deliberately pathological—so
 you can see exactly what signal each plot is designed to surface.
 
 ```{r load}
-library(bayesvis)
+# Load bayesplot first so bayesvis functions take precedence in the search path
 library(bayesplot)
+library(bayesvis)
 
 # Use a muted color scheme throughout
 color_scheme_set("blue")
@@ -150,7 +151,7 @@ round(kappa, 3)
 
 ---
 
-## 2. `ppc_loo_pit()` — LOO-PIT histogram
+## 2. `ppc_pit_hist()` — LOO-PIT histogram
 
 ### Statistical motivation
 
@@ -170,7 +171,7 @@ expected uniform density.
 ### Well-calibrated model
 
 ```{r pit-good}
-ppc_loo_pit(pit_good)
+ppc_pit_hist(pit_good)
 ```
 
 Bars are scattered around the reference line and mostly within the band.
@@ -178,7 +179,7 @@ Bars are scattered around the reference line and mostly within the band.
 ### Over-dispersed model
 
 ```{r pit-over}
-ppc_loo_pit(pit_over, bins = 12L)
+ppc_pit_hist(pit_over, bins = 12L)
 ```
 
 The U-shape reveals that observed values tend to lie in the tails of the
@@ -187,7 +188,7 @@ predictive distribution — the model's intervals are too wide.
 ### Under-dispersed model
 
 ```{r pit-under}
-ppc_loo_pit(pit_under, bins = 12L)
+ppc_pit_hist(pit_under, bins = 12L)
 ```
 
 The central hump reveals over-confidence: observations cluster near the
@@ -195,17 +196,17 @@ center of the predictive distribution.
 
 ---
 
-## 3. `ppc_loo_pit_qq()` — LOO-PIT Q-Q plot
+## 3. `ppc_pit_qq()` — LOO-PIT Q-Q plot
 
 The Q-Q version is more sensitive than the histogram for detecting subtle
 calibration failures, especially in the tails.
 
 ```{r pit-qq-good}
-ppc_loo_pit_qq(pit_good)
+ppc_pit_qq(pit_good)
 ```
 
 ```{r pit-qq-over}
-ppc_loo_pit_qq(pit_over)
+ppc_pit_qq(pit_over)
 ```
 
 The S-shaped curve for the over-dispersed case (points dip below the
@@ -306,7 +307,7 @@ All **bayesvis** plots respect `bayesplot::color_scheme_set()`:
 
 ```{r color-schemes, fig.width = 7, fig.height = 3.5}
 color_scheme_set("red")
-ppc_loo_pit(pit_under)
+ppc_pit_hist(pit_under)
 ```
 
 ```{r reset-scheme, include = FALSE}

@@ -6,8 +6,8 @@
 #'
 #' - `mcmc_shrinkage()`: Prior-to-posterior shrinkage diagnostic scatter plot
 #' - `compute_shrinkage()`: Helper to compute shrinkage factors from draws
-#' - `ppc_loo_pit()`: LOO probability integral transform histogram
-#' - `ppc_loo_pit_qq()`: LOO-PIT quantile-quantile plot with envelope
+#' - `ppc_pit_hist()`: LOO probability integral transform histogram
+#' - `ppc_pit_qq()`: LOO-PIT quantile-quantile plot with envelope
 #' - `mcmc_rank_ecdf()`: Rank-based ECDF plots per chain with simultaneous bands
 #' - `ppc_coverage()`: Posterior predictive coverage plot
 #'

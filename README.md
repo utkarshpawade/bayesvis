@@ -18,8 +18,8 @@ and respect bayesplot's color scheme and theming system.
 |---|---|---|
 | `mcmc_shrinkage()` | MCMC diagnostics | Prior-to-posterior shrinkage scatter |
 | `compute_shrinkage()` | Helper | Compute shrinkage factors programmatically |
-| `ppc_loo_pit()` | Posterior predictive checks | LOO-PIT histogram with uniform band |
-| `ppc_loo_pit_qq()` | Posterior predictive checks | LOO-PIT Q-Q plot with Beta envelope |
+| `ppc_pit_hist()` | Posterior predictive checks | LOO-PIT histogram with uniform band |
+| `ppc_pit_qq()` | Posterior predictive checks | LOO-PIT Q-Q plot with Beta envelope |
 | `mcmc_rank_ecdf()` | MCMC diagnostics | Per-chain rank ECDF with DKW bands |
 | `ppc_coverage()` | Posterior predictive checks | Observation-level coverage plot |
 
@@ -64,10 +64,10 @@ mcmc_shrinkage(posterior, prior_sd = 1)
 
 ```r
 # 2. LOO-PIT histogram  (well-calibrated model)
-ppc_loo_pit(runif(200))
+ppc_pit_hist(runif(200))
 
 # 3. LOO-PIT Q-Q plot  (over-dispersed model)
-ppc_loo_pit_qq(rbeta(200, 0.35, 0.35))
+ppc_pit_qq(rbeta(200, 0.35, 0.35))
 
 # 4. Rank ECDF — pathological chain 1
 arr <- array(rnorm(500 * 4 * 1), dim = c(500, 4, 1),
@@ -92,7 +92,7 @@ bayesvis inherits bayesplot's color scheme system:
 
 ```r
 color_scheme_set("red")
-ppc_loo_pit(runif(100))
+ppc_pit_hist(runif(100))
 
 color_scheme_set("teal")
 mcmc_shrinkage(posterior, prior_sd = 1)
