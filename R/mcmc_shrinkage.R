@@ -96,12 +96,10 @@ mcmc_shrinkage <- function(x,
     rlang::abort("One of `prior_sd` or `prior_draws` must be supplied.")
   }
 
-  # Assign default column names if missing
   if (is.null(colnames(x))) {
     colnames(x) <- paste0("param[", seq_len(ncol(x)), "]")
   }
 
-  # Subset parameters
   if (!is.null(pars)) {
     missing_pars <- setdiff(pars, colnames(x))
     if (length(missing_pars) > 0L) {
@@ -116,16 +114,13 @@ mcmc_shrinkage <- function(x,
   n_params    <- ncol(x)
   param_names <- colnames(x)
 
-  # Posterior statistics
   post_mean <- colMeans(x)
   post_var  <- apply(x, 2, stats::var)
   post_sd   <- sqrt(post_var)
 
-  # Prior variance — from prior_draws if supplied, else from prior_sd
   if (!is.null(prior_draws)) {
     prior_draws <- validate_draws_matrix(prior_draws)
     if (!is.null(pars)) {
-      # Match columns; allow prior_draws to have more columns than x
       pars_avail <- intersect(pars, colnames(prior_draws))
       if (length(pars_avail) < length(pars)) {
         rlang::abort(
@@ -153,7 +148,6 @@ mcmc_shrinkage <- function(x,
     prior_var <- prior_sd^2
   }
 
-  # Compute shrinkage (clamped to [0,1]) and z-scores
   shrinkage <- pmax(0, pmin(1, 1 - post_var / prior_var))
   z_score   <- post_mean / post_sd
 
@@ -163,7 +157,6 @@ mcmc_shrinkage <- function(x,
     shrinkage = shrinkage
   )
 
-  # Color scheme from bayesplot
   scheme    <- bayesplot::color_scheme_get()
   clr_pt    <- scheme[["mid"]]
   clr_fill  <- scheme[["light"]]
@@ -174,7 +167,6 @@ mcmc_shrinkage <- function(x,
     plot_df,
     ggplot2::aes(x = .data$z_score, y = .data$shrinkage)
   ) +
-    # Horizontal reference lines at kappa = 0, 0.5, 1
     ggplot2::geom_hline(
       yintercept = c(0, 1),
       color      = clr_dark,
@@ -189,7 +181,6 @@ mcmc_shrinkage <- function(x,
       linewidth  = 0.4,
       alpha      = 0.45
     ) +
-    # Vertical reference at z = 0
     ggplot2::geom_vline(
       xintercept = 0,
       color      = clr_dark,
@@ -197,7 +188,6 @@ mcmc_shrinkage <- function(x,
       linewidth  = 0.5,
       alpha      = 0.7
     ) +
-    # Scatter points
     ggplot2::geom_point(
       size  = point_size,
       shape = 21,
@@ -221,7 +211,6 @@ mcmc_shrinkage <- function(x,
     ) +
     bayesplot::bayesplot_theme_get()
 
-  # Parameter labels (suppressed when label_size == 0)
   if (label_size > 0) {
     p <- p + ggplot2::geom_text(
       ggplot2::aes(label = .data$parameter),

@@ -28,7 +28,6 @@ test_that("mcmc_rank_ecdf() works with single parameter", {
   single_param <- test_array[, , 1L, drop = FALSE]
   p <- mcmc_rank_ecdf(single_param)
   expect_s3_class(p, "ggplot")
-  # Single parameter: no facets expected
   geom_types <- vapply(p$layers, function(l) class(l$geom)[1], character(1))
   expect_false("FacetWrap" %in% class(p$facet))
 })
@@ -48,7 +47,6 @@ test_that("mcmc_rank_ecdf() works with unnamed dimnames", {
 })
 
 test_that("mcmc_rank_ecdf() detects badly mixing chains", {
-  # The plot should still build without error on pathological data
   p <- mcmc_rank_ecdf(bad_array)
   expect_s3_class(p, "ggplot")
 })

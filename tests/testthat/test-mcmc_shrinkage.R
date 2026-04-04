@@ -18,7 +18,6 @@ test_that("mcmc_shrinkage() works with prior_draws", {
 test_that("mcmc_shrinkage() prior_draws takes precedence over prior_sd", {
   prior <- matrix(rnorm(n_iter * n_params), nrow = n_iter)
   colnames(prior) <- colnames(test_posterior)
-  # Should not error even though prior_sd is also passed
   p <- mcmc_shrinkage(test_posterior, prior_sd = 1, prior_draws = prior)
   expect_s3_class(p, "ggplot")
 })
@@ -74,12 +73,10 @@ test_that("mcmc_shrinkage() errors on non-existent pars", {
 test_that("mcmc_shrinkage() label_size = 0 suppresses labels", {
   p <- mcmc_shrinkage(test_posterior, prior_sd = 1, label_size = 0)
   expect_s3_class(p, "ggplot")
-  # geom_text should not be present
   geom_types <- vapply(p$layers, function(l) class(l$geom)[1], character(1))
   expect_false("GeomText" %in% geom_types)
 })
 
-# compute_shrinkage() tests ------------------------------------------------
 
 test_that("compute_shrinkage() returns named numeric vector", {
   kappa <- compute_shrinkage(test_posterior, prior_sd = 1)
@@ -94,14 +91,12 @@ test_that("compute_shrinkage() values are in [0, 1]", {
 })
 
 test_that("compute_shrinkage() high-shrinkage parameters near 1", {
-  # alpha and beta[1] have prior_sd = 1 but posterior_sd << 1
   kappa <- compute_shrinkage(test_posterior, prior_sd = 1)
   expect_gt(kappa["alpha"],   0.9)
   expect_gt(kappa["beta[1]"], 0.9)
 })
 
 test_that("compute_shrinkage() low-shrinkage parameters near 0", {
-  # sigma has posterior_sd ≈ prior_sd = 1
   kappa <- compute_shrinkage(test_posterior, prior_sd = 1)
   expect_lt(kappa["sigma"], 0.3)
 })

@@ -76,7 +76,6 @@ mcmc_rank_ecdf <- function(x,
   n_chains <- dim(x)[2L]
   n_params <- dim(x)[3L]
 
-  # Assign dimnames if missing
   if (is.null(dimnames(x)[[2L]])) {
     dimnames(x)[[2L]] <- paste0("chain:", seq_len(n_chains))
   }
@@ -87,7 +86,6 @@ mcmc_rank_ecdf <- function(x,
   chain_names <- dimnames(x)[[2L]]
   param_names <- dimnames(x)[[3L]]
 
-  # Subset parameters
   if (!is.null(pars)) {
     missing_pars <- setdiff(pars, param_names)
     if (length(missing_pars) > 0L) {
@@ -105,16 +103,13 @@ mcmc_rank_ecdf <- function(x,
     rlang::abort("`prob` must be in (0, 1).")
   }
 
-  S_total <- n_iter * n_chains  # total pooled draws per parameter
+  S_total <- n_iter * n_chains
 
-  # Build long tibble: for each (parameter, chain), compute rank ECDF
   plot_rows <- vector("list", n_params * n_chains)
   idx <- 0L
 
   for (p in seq_len(n_params)) {
-    draws_p <- x[, , p]  # iterations × chains matrix
-
-    # Pool and rank (average ties)
+    draws_p <- x[, , p]
     pooled  <- as.vector(draws_p)
     ranks_p <- matrix(
       rank(pooled, ties.method = "average"),
@@ -125,11 +120,9 @@ mcmc_rank_ecdf <- function(x,
     for (ch in seq_len(n_chains)) {
       idx <- idx + 1L
 
-      # Sort within-chain ranks and compute ECDF
       chain_ranks  <- sort(ranks_p[, ch])
       n_ch         <- length(chain_ranks)
       ecdf_y       <- seq_len(n_ch) / n_ch
-      # Map ranks to [0,1] probability scale
       theo_x       <- chain_ranks / S_total
 
       plot_rows[[idx]] <- tibble::tibble(
@@ -145,7 +138,6 @@ mcmc_rank_ecdf <- function(x,
   plot_df$parameter <- factor(plot_df$parameter, levels = param_names)
   plot_df$chain     <- factor(plot_df$chain,     levels = chain_names)
 
-  # DKW simultaneous band (based on n_iter draws per chain)
   epsilon  <- ecdf_simultaneous_band(n_iter, prob = prob)
   theo_seq <- seq(0, 1, length.out = 300)
   band_df  <- data.frame(
@@ -154,13 +146,11 @@ mcmc_rank_ecdf <- function(x,
     upper       = pmin(1, theo_seq + epsilon)
   )
 
-  # Colors: chains get cycling colors from bayesplot scheme
   scheme       <- bayesplot::color_scheme_get()
   band_fill    <- scheme[["light"]]
   ref_color    <- scheme[["dark"]]
   chain_colors <- bayesplot_chain_colors(n_chains)
 
-  # Merge default facet args with user-supplied ones
   default_facet <- list(ncol = min(3L, n_params))
   facet_args    <- utils::modifyList(default_facet, as.list(facet_args))
 
@@ -172,7 +162,6 @@ mcmc_rank_ecdf <- function(x,
       color = .data$chain
     )
   ) +
-    # Simultaneous confidence band
     ggplot2::geom_ribbon(
       data        = band_df,
       ggplot2::aes(
@@ -184,7 +173,6 @@ mcmc_rank_ecdf <- function(x,
       alpha       = 0.45,
       inherit.aes = FALSE
     ) +
-    # Ideal-mixing reference diagonal
     ggplot2::geom_abline(
       intercept = 0,
       slope     = 1,
@@ -193,7 +181,6 @@ mcmc_rank_ecdf <- function(x,
       linewidth = 0.5,
       alpha     = 0.7
     ) +
-    # Per-chain ECDF step functions
     ggplot2::geom_step(linewidth = 0.75, alpha = 0.85) +
     ggplot2::scale_color_manual(
       values = chain_colors,
@@ -213,7 +200,6 @@ mcmc_rank_ecdf <- function(x,
     ) +
     bayesplot::bayesplot_theme_get()
 
-  # Facet when multiple parameters
   if (n_params > 1L) {
     p <- p + do.call(
       ggplot2::facet_wrap,

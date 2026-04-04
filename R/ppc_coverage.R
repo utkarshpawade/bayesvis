@@ -83,7 +83,6 @@ ppc_coverage <- function(y,
   alpha_lo <- (1 - prob) / 2
   alpha_hi <- 1 - alpha_lo
 
-  # Compute posterior predictive intervals and coverage
   lower   <- apply(yrep, 2, stats::quantile, probs = alpha_lo, names = FALSE)
   upper   <- apply(yrep, 2, stats::quantile, probs = alpha_hi, names = FALSE)
   pm      <- colMeans(yrep)
@@ -99,7 +98,6 @@ ppc_coverage <- function(y,
     covered   = covered
   )
 
-  # Sort observations
   df <- switch(
     sort_by,
     y     = df[order(df$y),  ],
@@ -108,23 +106,19 @@ ppc_coverage <- function(y,
   )
   df$x_pos <- seq_len(n)
 
-  # Color scheme
   scheme     <- bayesplot::color_scheme_get()
   col_cover  <- scheme[["mid"]]
   col_miss   <- scheme[["dark_highlight"]]
   fill_cover <- scheme[["light"]]
   fill_miss  <- scheme[["dark"]]
 
-  # Annotation: empirical vs. nominal coverage
   ann_label <- sprintf(
     "Empirical: %.1f%%  (nominal: %.0f%%)",
     100 * emp_cov, 100 * prob
   )
-  # Choose annotation color based on coverage accuracy
   ann_color <- if (abs(emp_cov - prob) < 0.05) "grey30" else col_miss
 
   ggplot2::ggplot(df, ggplot2::aes(x = .data$x_pos)) +
-    # Posterior predictive intervals
     ggplot2::geom_linerange(
       ggplot2::aes(
         ymin  = .data$lower,
@@ -134,7 +128,6 @@ ppc_coverage <- function(y,
       linewidth = interval_linewidth,
       alpha     = 0.65
     ) +
-    # Observed values as points
     ggplot2::geom_point(
       ggplot2::aes(
         y     = .data$y,
@@ -155,7 +148,6 @@ ppc_coverage <- function(y,
       labels = c("TRUE"  = "Covered",  "FALSE" = "Not covered"),
       name   = NULL
     ) +
-    # Coverage rate annotation (top-left)
     ggplot2::annotate(
       "text",
       x        = 1,

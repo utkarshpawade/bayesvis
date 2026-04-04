@@ -1,16 +1,5 @@
-# Internal helper functions shared across bayesvis
-# None of these are exported.
-
 # ── Input validation ──────────────────────────────────────────────────────────
 
-#' Validate and coerce a posterior draws matrix
-#'
-#' Accepts a numeric matrix or a data frame that can be coerced to one.
-#' Errors informatively on wrong type, wrong dimensions, or non-numeric input.
-#'
-#' @param x Object to validate.
-#' @param call Calling environment for error messages.
-#' @return A numeric matrix.
 #' @noRd
 validate_draws_matrix <- function(x, call = rlang::caller_env()) {
   if (is.data.frame(x)) {
@@ -32,11 +21,6 @@ validate_draws_matrix <- function(x, call = rlang::caller_env()) {
   x
 }
 
-#' Validate a 3D MCMC array (iterations x chains x parameters)
-#'
-#' @param x Object to validate.
-#' @param call Calling environment for error messages.
-#' @return A validated 3D numeric array.
 #' @noRd
 validate_mcmc_array <- function(x, call = rlang::caller_env()) {
   if (!is.array(x) || length(dim(x)) != 3L) {
@@ -60,7 +44,6 @@ validate_mcmc_array <- function(x, call = rlang::caller_env()) {
   x
 }
 
-#' Validate observed data vector y
 #' @noRd
 validate_y <- function(y, call = rlang::caller_env()) {
   if (!is.numeric(y)) {
@@ -80,7 +63,6 @@ validate_y <- function(y, call = rlang::caller_env()) {
   y
 }
 
-#' Validate posterior predictive draws matrix yrep
 #' @noRd
 validate_yrep <- function(yrep, y, call = rlang::caller_env()) {
   if (!is.matrix(yrep) || !is.numeric(yrep)) {
@@ -98,7 +80,6 @@ validate_yrep <- function(yrep, y, call = rlang::caller_env()) {
   yrep
 }
 
-#' Validate LOO-PIT values
 #' @noRd
 validate_pit <- function(pit, call = rlang::caller_env()) {
   if (!is.numeric(pit)) {
@@ -123,19 +104,11 @@ validate_pit <- function(pit, call = rlang::caller_env()) {
 
 # ── Color helpers ─────────────────────────────────────────────────────────────
 
-#' Get a named color from the current bayesplot color scheme
 #' @noRd
 scheme_color <- function(name) {
   bayesplot::color_scheme_get()[[name]]
 }
 
-#' Build a set of chain colors cycling through the current scheme
-#'
-#' Returns `n` colors cycling through the bayesplot color scheme palette,
-#' so chain colors remain consistent with the user's chosen scheme.
-#'
-#' @param n_chains Integer. Number of chains.
-#' @return Character vector of hex colors of length `n_chains`.
 #' @noRd
 bayesplot_chain_colors <- function(n_chains) {
   scheme <- bayesplot::color_scheme_get()
@@ -146,15 +119,7 @@ bayesplot_chain_colors <- function(n_chains) {
 
 # ── Statistical helpers ───────────────────────────────────────────────────────
 
-#' Compute DKW simultaneous confidence band half-width
-#'
-#' Uses the Dvoretzky-Kiefer-Wolfowitz inequality:
-#' P(sup|F_n(x) - F(x)| > epsilon) <= 2 * exp(-2 * n * epsilon^2)
-#' Solved for epsilon at a given coverage probability.
-#'
-#' @param n Integer. Number of observations.
-#' @param prob Numeric. Coverage probability.
-#' @return Scalar epsilon (half-width of the simultaneous band).
+#' DKW inequality: epsilon = sqrt(log(2/alpha) / (2n))
 #' @noRd
 ecdf_simultaneous_band <- function(n, prob = 0.95) {
   alpha   <- 1 - prob
@@ -163,12 +128,9 @@ ecdf_simultaneous_band <- function(n, prob = 0.95) {
 
 # ── Formatting helpers ────────────────────────────────────────────────────────
 
-#' Format a probability as a percentage label
 #' @noRd
 scales_label <- function(prob) {
   paste0(round(100 * prob), "%")
 }
 
-# Suppress R CMD check NOTE for ggplot2 computed aesthetics used inside
-# after_stat() — these are not regular R objects.
 utils::globalVariables("density")

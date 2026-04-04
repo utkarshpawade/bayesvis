@@ -1,5 +1,3 @@
-# ppc_pit_hist() tests --------------------------------------------------------
-
 test_that("ppc_pit_hist() returns a ggplot object", {
   p <- ppc_pit_hist(test_pit)
   expect_s3_class(p, "ggplot")
@@ -57,8 +55,6 @@ test_that("ppc_pit_hist() minimum valid input (3 values)", {
   expect_s3_class(p, "ggplot")
 })
 
-
-# ppc_pit_qq() tests -----------------------------------------------------
 
 test_that("ppc_pit_qq() returns a ggplot object", {
   p <- ppc_pit_qq(test_pit)

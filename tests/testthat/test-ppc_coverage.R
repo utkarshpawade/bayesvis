@@ -16,12 +16,10 @@ test_that("ppc_coverage() accepts all sort_by options", {
 })
 
 test_that("ppc_coverage() reports correct number of uncovered obs", {
-  # Use an over-confident model so we expect < 90% coverage
   yrep_narrow <- matrix(
     rnorm(500L * n_obs, mean = mean(test_y), sd = 0.05),
     nrow = 500L
   )
-  # Just check the plot builds; coverage annotation is in subtitle
   p <- ppc_coverage(test_y, yrep_narrow, prob = 0.90)
   expect_s3_class(p, "ggplot")
 })
@@ -68,12 +66,7 @@ test_that("ppc_coverage() errors on non-matrix yrep", {
 
 test_that("ppc_coverage() warns and handles NA in y", {
   y_with_na <- c(test_y, NA)
-  # yrep must have ncol == length(y_with_na) after removal — so build it for
-  # the full length and let the function handle the mismatch warning path
-  # Instead, test that NA warning is raised when y is passed with NAs
   expect_warning(
-    # Will error after the NA warning because ncol(test_yrep) != length(y_with_na)
-    # so we catch only the NA warning via tryCatch
     tryCatch(
       ppc_coverage(y_with_na, test_yrep),
       error = function(e) NULL

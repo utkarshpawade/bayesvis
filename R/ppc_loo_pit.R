@@ -65,31 +65,24 @@ ppc_pit_hist <- function(pit, bins = 10L, prob = 0.95, ...) {
     rlang::abort("`prob` must be in (0, 1).")
   }
 
-  # Under H0 (uniform): each bin count ~ Binomial(n, 1/K)
-  # Expected density = 1 (uniform density on [0,1])
-  # SD of density = sqrt(n * p * (1-p)) / (n * (1/K))
-  #               = sqrt((1-1/K) / (n/K))
   bin_prob   <- 1 / K
-  density_sd <- sqrt(bin_prob * (1 - bin_prob) * K^2 / n)  # simplifies to sqrt(K*(K-1)/n)
+  density_sd <- sqrt(bin_prob * (1 - bin_prob) * K^2 / n)
   z_crit     <- stats::qnorm((1 + prob) / 2)
 
   band_lower <- max(0, 1 - z_crit * density_sd)
   band_upper <- 1 + z_crit * density_sd
 
-  # Color scheme
   scheme   <- bayesplot::color_scheme_get()
   fill_col <- scheme[["light"]]
   line_col <- scheme[["dark"]]
   band_col <- scheme[["mid"]]
 
-  # Band spans the full [0,1] x range
   band_df <- data.frame(
     xmin = 0, xmax = 1,
     ymin = band_lower, ymax = band_upper
   )
 
   ggplot2::ggplot(data.frame(pit = pit), ggplot2::aes(x = .data$pit)) +
-    # Confidence band (behind histogram)
     ggplot2::geom_rect(
       data        = band_df,
       ggplot2::aes(
@@ -100,7 +93,6 @@ ppc_pit_hist <- function(pit, bins = 10L, prob = 0.95, ...) {
       alpha       = 0.25,
       inherit.aes = FALSE
     ) +
-    # Density histogram
     ggplot2::geom_histogram(
       ggplot2::aes(y = ggplot2::after_stat(density)),
       bins      = K,
@@ -109,7 +101,6 @@ ppc_pit_hist <- function(pit, bins = 10L, prob = 0.95, ...) {
       linewidth = 0.35,
       alpha     = 0.85
     ) +
-    # Expected uniform density
     ggplot2::geom_hline(
       yintercept = 1,
       color      = line_col,
@@ -186,15 +177,12 @@ ppc_pit_qq <- function(pit, prob = 0.95, ...) {
     rlang::abort("`prob` must be in (0, 1).")
   }
 
-  # Sorted empirical PIT values
   emp   <- sort(pit)
   alpha <- (1 - prob) / 2
 
-  # Theoretical uniform quantiles (mean of k-th order statistic)
   ranks <- seq_len(n)
   theo  <- ranks / (n + 1)
 
-  # Pointwise envelope via Beta order-statistic distribution
   lower <- stats::qbeta(alpha,     shape1 = ranks, shape2 = n - ranks + 1)
   upper <- stats::qbeta(1 - alpha, shape1 = ranks, shape2 = n - ranks + 1)
 
@@ -205,7 +193,6 @@ ppc_pit_qq <- function(pit, prob = 0.95, ...) {
     upper       = upper
   )
 
-  # Color scheme
   scheme   <- bayesplot::color_scheme_get()
   pt_color <- scheme[["mid"]]
   pt_fill  <- scheme[["light"]]
@@ -216,13 +203,11 @@ ppc_pit_qq <- function(pit, prob = 0.95, ...) {
     qq_df,
     ggplot2::aes(x = .data$theoretical, y = .data$empirical)
   ) +
-    # Confidence envelope
     ggplot2::geom_ribbon(
       ggplot2::aes(ymin = .data$lower, ymax = .data$upper),
       fill  = env_col,
       alpha = 0.30
     ) +
-    # Reference diagonal
     ggplot2::geom_abline(
       intercept = 0,
       slope     = 1,
@@ -230,7 +215,6 @@ ppc_pit_qq <- function(pit, prob = 0.95, ...) {
       linetype  = "dashed",
       linewidth = 0.6
     ) +
-    # Q-Q points
     ggplot2::geom_point(
       size  = 2,
       shape = 21,
