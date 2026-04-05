@@ -9,6 +9,10 @@ navbar:
     right: [search, github]
 
 reference:
+  - title: Package
+    contents:
+      - bayesvis-package
+
   - title: MCMC Diagnostics
     desc: Visualizations for assessing MCMC convergence and behavior.
     contents:
