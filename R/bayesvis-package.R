@@ -33,6 +33,8 @@
 #' for assessing convergence of MCMC (with discussion). *Bayesian Analysis*,
 #' 16(2), 667--718. \doi{10.1214/20-BA1221}
 #'
+#' @author NULL
+#' @seealso NULL
 #' @name bayesvis-package
 #' @aliases bayesvis
 #' @importFrom rlang .data

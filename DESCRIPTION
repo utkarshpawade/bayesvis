@@ -5,7 +5,7 @@ Version: 0.1.0
 Authors@R:
     person("Utkarsh", "Pawade",
            email = "utkarshpawade2@gmail.com",
-           )
+           role = c("aut", "cre"))
 Depends:
     R (>= 4.1.0)
 Description: An extension prototype for the 'bayesplot' package providing
