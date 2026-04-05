@@ -85,3 +85,7 @@ Gelman, A., Meng, X.-L., and Stern, H. (1996). Posterior predictive
 assessment of model fitness via realized discrepancies. \emph{Statistica Sinica},
 6(4), 733--760.
 }
+\seealso{
+\code{\link[=ppc_pit_hist]{ppc_pit_hist()}} and \code{\link[=ppc_pit_qq]{ppc_pit_qq()}} for LOO-PIT diagnostics;
+\code{\link[bayesplot:PPC-intervals]{bayesplot::ppc_intervals()}} for a related bayesplot visualization.
+}

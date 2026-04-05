@@ -39,6 +39,9 @@
 #' quantiles of the column \eqn{\text{yrep}[, i]}. Coverage is defined as
 #' \eqn{y_i \in [\text{lower}_i,\, \text{upper}_i]}.
 #'
+#' @seealso [ppc_pit_hist()] and [ppc_pit_qq()] for LOO-PIT diagnostics;
+#'   [bayesplot::ppc_intervals()] for a related bayesplot visualization.
+#'
 #' @references
 #' Gabry, J., Simpson, D., Vehtari, A., Betancourt, M., and Gelman, A. (2019).
 #' Visualization in Bayesian workflow. *Journal of the Royal Statistical
@@ -74,6 +77,8 @@ ppc_coverage <- function(y,
   y       <- validate_y(y)
   yrep    <- validate_yrep(yrep, y)
   sort_by <- match.arg(sort_by)
+  validate_positive_scalar(point_size, "point_size")
+  validate_positive_scalar(interval_linewidth, "interval_linewidth")
 
   if (prob <= 0 || prob >= 1) {
     rlang::abort("`prob` must be in (0, 1).")
@@ -96,6 +101,12 @@ ppc_coverage <- function(y,
     upper     = upper,
     pm        = pm,
     covered   = covered
+  )
+
+  df$covered <- factor(
+    df$covered,
+    levels = c(TRUE, FALSE),
+    labels = c("Covered", "Not covered")
   )
 
   df <- switch(
@@ -139,13 +150,11 @@ ppc_coverage <- function(y,
       alpha = 0.9
     ) +
     ggplot2::scale_color_manual(
-      values = c("TRUE"  = col_cover,  "FALSE" = col_miss),
-      labels = c("TRUE"  = "Covered",  "FALSE" = "Not covered"),
+      values = c("Covered" = col_cover, "Not covered" = col_miss),
       name   = NULL
     ) +
     ggplot2::scale_fill_manual(
-      values = c("TRUE"  = fill_cover, "FALSE" = fill_miss),
-      labels = c("TRUE"  = "Covered",  "FALSE" = "Not covered"),
+      values = c("Covered" = fill_cover, "Not covered" = fill_miss),
       name   = NULL
     ) +
     ggplot2::annotate(
@@ -171,6 +180,6 @@ ppc_coverage <- function(y,
         nrow(yrep), " posterior predictive draws"
       )
     ) +
-    ggplot2::theme(legend.position = "bottom") +
-    bayesplot::bayesplot_theme_get()
+    bayesplot::bayesplot_theme_get() +
+    ggplot2::theme(legend.position = "bottom")
 }

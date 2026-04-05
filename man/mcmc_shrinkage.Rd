@@ -104,3 +104,7 @@ Betancourt, M. and Girolami, M. (2015). Hamiltonian Monte Carlo for
 hierarchical models. \emph{Current Trends in Bayesian Methodology with
 Applications}, 79(30), 2--4.
 }
+\seealso{
+\code{\link[=compute_shrinkage]{compute_shrinkage()}} for computing shrinkage factors without
+plotting; \code{\link[bayesplot:MCMC-intervals]{bayesplot::mcmc_areas()}} for marginal posterior visualization.
+}

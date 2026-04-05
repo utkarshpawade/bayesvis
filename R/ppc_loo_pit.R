@@ -26,6 +26,9 @@
 #' The histogram bars display density, not counts, so the theoretical
 #' uniform reference is the horizontal line at \eqn{y = 1}.
 #'
+#' @seealso [ppc_pit_qq()] for the Q-Q variant; [ppc_coverage()] for
+#'   posterior predictive coverage checks.
+#'
 #' @references
 #' Vehtari, A., Gelman, A., and Gabry, J. (2017). Practical Bayesian model
 #' evaluation using leave-one-out cross-validation and WAIC. *Statistics and
@@ -52,6 +55,7 @@
 #'
 #' @export
 ppc_pit_hist <- function(pit, bins = 10L, prob = 0.95, ...) {
+  rlang::check_dots_empty()
   pit <- validate_pit(pit)
   n   <- length(pit)
   K   <- as.integer(bins)
@@ -77,12 +81,12 @@ ppc_pit_hist <- function(pit, bins = 10L, prob = 0.95, ...) {
   line_col <- scheme[["dark"]]
   band_col <- scheme[["mid"]]
 
-  band_df <- data.frame(
+  band_df <- tibble::tibble(
     xmin = 0, xmax = 1,
     ymin = band_lower, ymax = band_upper
   )
 
-  ggplot2::ggplot(data.frame(pit = pit), ggplot2::aes(x = .data$pit)) +
+  ggplot2::ggplot(tibble::tibble(pit = pit), ggplot2::aes(x = .data$pit)) +
     ggplot2::geom_rect(
       data        = band_df,
       ggplot2::aes(
@@ -94,7 +98,7 @@ ppc_pit_hist <- function(pit, bins = 10L, prob = 0.95, ...) {
       inherit.aes = FALSE
     ) +
     ggplot2::geom_histogram(
-      ggplot2::aes(y = ggplot2::after_stat(density)),
+      ggplot2::aes(y = ggplot2::after_stat(.data$density)),
       bins      = K,
       fill      = fill_col,
       color     = line_col,
@@ -152,6 +156,9 @@ ppc_pit_hist <- function(pit, bins = 10L, prob = 0.95, ...) {
 #' This is more accurate than a normal-approximation envelope for small
 #' samples and near the boundaries.
 #'
+#' @seealso [ppc_pit_hist()] for the histogram variant; [ppc_coverage()] for
+#'   posterior predictive coverage checks.
+#'
 #' @references
 #' Gabry, J., Simpson, D., Vehtari, A., Betancourt, M., and Gelman, A. (2019).
 #' Visualization in Bayesian workflow. *Journal of the Royal Statistical
@@ -170,6 +177,7 @@ ppc_pit_hist <- function(pit, bins = 10L, prob = 0.95, ...) {
 #'
 #' @export
 ppc_pit_qq <- function(pit, prob = 0.95, ...) {
+  rlang::check_dots_empty()
   pit <- validate_pit(pit)
   n   <- length(pit)
 

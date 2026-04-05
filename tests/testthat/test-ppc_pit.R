@@ -89,3 +89,30 @@ test_that("ppc_pit_qq() produces a fixed/equal aspect ratio coordinate", {
                        isTRUE(all.equal(coord$ratio, 1)))
   expect_true(is_coord_equal)
 })
+
+test_that("ppc_pit_hist() errors on misspelled arguments via ...", {
+  expect_error(
+    ppc_pit_hist(test_pit, bns = 20),
+    regexp = "empty|\\.\\.\\."
+  )
+})
+
+test_that("ppc_pit_qq() errors on misspelled arguments via ...", {
+  expect_error(
+    ppc_pit_qq(test_pit, proob = 0.99),
+    regexp = "empty|\\.\\.\\."
+  )
+})
+
+test_that("ppc_pit_qq() plot data has correct structure", {
+  p <- ppc_pit_qq(test_pit)
+  expect_equal(nrow(p$data), length(test_pit))
+  expect_true(all(c("theoretical", "empirical", "lower", "upper") %in%
+                    names(p$data)))
+  expect_true(all(p$data$empirical >= 0 & p$data$empirical <= 1))
+})
+
+test_that("ppc_pit_hist() plot data matches input length", {
+  p <- ppc_pit_hist(test_pit)
+  expect_equal(nrow(p$data), length(test_pit))
+})

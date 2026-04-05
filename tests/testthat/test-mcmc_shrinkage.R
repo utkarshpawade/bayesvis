@@ -113,3 +113,45 @@ test_that("compute_shrinkage() errors without prior specification", {
     regexp = "prior_sd|prior_draws"
   )
 })
+
+test_that("compute_shrinkage() errors on mismatched prior_draws columns", {
+  wrong_cols <- matrix(rnorm(n_iter * 2L), nrow = n_iter)
+  expect_error(
+    compute_shrinkage(test_posterior, prior_draws = wrong_cols),
+    regexp = "same number of columns"
+  )
+})
+
+test_that("compute_shrinkage() errors on wrong prior_sd length", {
+  expect_error(
+    compute_shrinkage(test_posterior, prior_sd = c(1, 2)),
+    regexp = "length 1 or"
+  )
+})
+
+test_that("mcmc_shrinkage() plot data has correct structure", {
+  p <- mcmc_shrinkage(test_posterior, prior_sd = 1)
+  expect_equal(nrow(p$data), n_params)
+  expect_true(all(c("z_score", "shrinkage", "parameter") %in% names(p$data)))
+  expect_true(all(p$data$shrinkage >= 0 & p$data$shrinkage <= 1))
+})
+
+test_that("mcmc_shrinkage() errors on non-numeric point_size", {
+  expect_error(
+    mcmc_shrinkage(test_posterior, prior_sd = 1, point_size = "big"),
+    regexp = "point_size"
+  )
+})
+
+test_that("validate_draws_matrix() rejects 1-row matrix", {
+  expect_error(
+    bayesvis:::validate_draws_matrix(matrix(1:3, nrow = 1)),
+    regexp = "at least 2"
+  )
+})
+
+test_that("validate_draws_matrix() coerces data.frame", {
+  df <- data.frame(a = 1:5, b = 6:10)
+  result <- bayesvis:::validate_draws_matrix(df)
+  expect_true(is.matrix(result))
+})

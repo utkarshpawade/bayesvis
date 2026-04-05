@@ -8,7 +8,7 @@ compute_shrinkage(x, prior_sd = NULL, prior_draws = NULL)
 }
 \arguments{
 \item{x}{A numeric matrix of posterior draws with dimensions
-[iterations × parameters]. Column names are used as parameter labels.
+[iterations x parameters]. Column names are used as parameter labels.
 A data frame will be coerced to a matrix.}
 
 \item{prior_sd}{A numeric vector of prior standard deviations, one per
@@ -36,4 +36,7 @@ colnames(post) <- paste0("b[", 1:4, "]")
 
 compute_shrinkage(post, prior_sd = 1)
 
+}
+\seealso{
+\code{\link[=mcmc_shrinkage]{mcmc_shrinkage()}} for the corresponding diagnostic plot.
 }

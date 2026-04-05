@@ -43,15 +43,7 @@ for assessing convergence of MCMC (with discussion). \emph{Bayesian Analysis},
 16(2), 667--718. \doi{10.1214/20-BA1221}
 }
 
-\seealso{
-Useful links:
-\itemize{
-  \item \url{https://github.com/example/bayesvis}
-  \item Report bugs at \url{https://github.com/example/bayesvis/issues}
-}
-
-}
 \author{
-\strong{Maintainer}: Bayesvis Contributors \email{bayesvis@example.com}
+\strong{Maintainer}: Utkarsh Pawade \email{utkarshpawade2@gmail.com}
 
 }

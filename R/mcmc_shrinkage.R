@@ -51,6 +51,9 @@
 #' Reference lines are drawn at \eqn{\kappa \in \{0, 0.5, 1\}} and at
 #' \eqn{z = 0}.
 #'
+#' @seealso [compute_shrinkage()] for computing shrinkage factors without
+#'   plotting; [bayesplot::mcmc_areas()] for marginal posterior visualization.
+#'
 #' @references
 #' Piironen, J. and Vehtari, A. (2017). Comparison of Bayesian predictive
 #' methods for model selection. *Statistics and Computing*, 27(3), 711--735.
@@ -91,6 +94,8 @@ mcmc_shrinkage <- function(x,
                            point_size  = 3,
                            label_size  = 3) {
   x <- validate_draws_matrix(x)
+  validate_positive_scalar(point_size, "point_size")
+  validate_positive_scalar(label_size, "label_size")
 
   if (is.null(prior_sd) && is.null(prior_draws)) {
     rlang::abort("One of `prior_sd` or `prior_draws` must be supplied.")
@@ -233,9 +238,20 @@ mcmc_shrinkage <- function(x,
 #' \widehat{\operatorname{Var}}(\theta)} for each parameter, returning a
 #' named numeric vector. Values are clamped to \[0, 1\].
 #'
-#' @inheritParams mcmc_shrinkage
+#' @param x A numeric matrix of posterior draws with dimensions
+#'   \[iterations x parameters\]. Column names are used as parameter labels.
+#'   A data frame will be coerced to a matrix.
+#' @param prior_sd A numeric vector of prior standard deviations, one per
+#'   parameter. Recycled to `ncol(x)` if scalar. Either `prior_sd` or
+#'   `prior_draws` must be supplied.
+#' @param prior_draws An optional numeric matrix of prior draws with the same
+#'   column structure as `x`. Use this when closed-form prior SDs are
+#'   unavailable. If both `prior_sd` and `prior_draws` are supplied,
+#'   `prior_draws` takes precedence.
 #'
 #' @return A named numeric vector of shrinkage factors, one per parameter.
+#'
+#' @seealso [mcmc_shrinkage()] for the corresponding diagnostic plot.
 #'
 #' @examples
 #' set.seed(1)
@@ -261,9 +277,20 @@ compute_shrinkage <- function(x, prior_sd = NULL, prior_draws = NULL) {
 
   if (!is.null(prior_draws)) {
     prior_draws <- validate_draws_matrix(prior_draws)
-    prior_var   <- apply(prior_draws, 2, stats::var)
+    if (ncol(prior_draws) != n_params) {
+      rlang::abort(
+        "`prior_draws` must have the same number of columns as `x`."
+      )
+    }
+    prior_var <- apply(prior_draws, 2, stats::var)
   } else {
     if (length(prior_sd) == 1L) prior_sd <- rep(prior_sd, n_params)
+    if (length(prior_sd) != n_params) {
+      rlang::abort(paste0(
+        "`prior_sd` must be length 1 or ", n_params,
+        " (one per parameter)."
+      ))
+    }
     prior_var <- prior_sd^2
   }
 

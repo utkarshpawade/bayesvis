@@ -35,6 +35,5 @@
 #'
 #' @name bayesvis-package
 #' @aliases bayesvis
-#' @import ggplot2
 #' @importFrom rlang .data
 "_PACKAGE"

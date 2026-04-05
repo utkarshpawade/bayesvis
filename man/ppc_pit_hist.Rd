@@ -62,3 +62,7 @@ Gabry, J., Simpson, D., Vehtari, A., Betancourt, M., and Gelman, A. (2019).
 Visualization in Bayesian workflow. \emph{Journal of the Royal Statistical
 Society Series A}, 182(2), 389--402. \doi{10.1111/rssa.12378}
 }
+\seealso{
+\code{\link[=ppc_pit_qq]{ppc_pit_qq()}} for the Q-Q variant; \code{\link[=ppc_coverage]{ppc_coverage()}} for
+posterior predictive coverage checks.
+}

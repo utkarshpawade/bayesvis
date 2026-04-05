@@ -81,3 +81,23 @@ test_that("mcmc_rank_ecdf() errors on non-numeric array", {
   char_arr <- array(as.character(1:24), dim = c(4, 3, 2))
   expect_error(mcmc_rank_ecdf(char_arr), regexp = "numeric")
 })
+
+test_that("mcmc_rank_ecdf() plot data has correct dimensions", {
+  p <- mcmc_rank_ecdf(test_array)
+  expect_equal(nrow(p$data), n_iter * n_chains * n_params)
+  expect_true(all(c("parameter", "chain", "theoretical", "ecdf_y") %in%
+                    names(p$data)))
+})
+
+test_that("mcmc_rank_ecdf() ecdf_y values are in [0, 1]", {
+  p <- mcmc_rank_ecdf(test_array)
+  expect_true(all(p$data$ecdf_y >= 0 & p$data$ecdf_y <= 1))
+  expect_true(all(p$data$theoretical >= 0 & p$data$theoretical <= 1))
+})
+
+test_that("validate_mcmc_array() rejects 2D matrix", {
+  expect_error(
+    bayesvis:::validate_mcmc_array(matrix(1:10, nrow = 5)),
+    regexp = "3D array"
+  )
+})

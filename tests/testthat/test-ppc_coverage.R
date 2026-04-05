@@ -64,13 +64,10 @@ test_that("ppc_coverage() errors on non-matrix yrep", {
   )
 })
 
-test_that("ppc_coverage() warns and handles NA in y", {
+test_that("ppc_coverage() errors on NA in y", {
   y_with_na <- c(test_y, NA)
-  expect_warning(
-    tryCatch(
-      ppc_coverage(y_with_na, test_yrep),
-      error = function(e) NULL
-    ),
+  expect_error(
+    ppc_coverage(y_with_na, test_yrep),
     regexp = "NA"
   )
 })
@@ -79,5 +76,25 @@ test_that("ppc_coverage() invalid sort_by errors", {
   expect_error(
     ppc_coverage(test_y, test_yrep, sort_by = "banana"),
     regexp = "sort_by|arg"
+  )
+})
+
+test_that("ppc_coverage() plot data has one row per observation", {
+  p <- ppc_coverage(test_y, test_yrep)
+  expect_equal(nrow(p$data), n_obs)
+  expect_true(all(c("y", "lower", "upper", "covered", "x_pos") %in%
+                    names(p$data)))
+})
+
+test_that("ppc_coverage() covered column is a factor", {
+  p <- ppc_coverage(test_y, test_yrep)
+  expect_s3_class(p$data$covered, "factor")
+  expect_equal(levels(p$data$covered), c("Covered", "Not covered"))
+})
+
+test_that("ppc_coverage() errors on non-numeric point_size", {
+  expect_error(
+    ppc_coverage(test_y, test_yrep, point_size = "big"),
+    regexp = "point_size"
   )
 })

@@ -51,12 +51,14 @@ validate_y <- function(y, call = rlang::caller_env()) {
   }
   y <- as.numeric(y)
   if (anyNA(y)) {
-    rlang::warn("`y` contains NA values; they will be removed.")
-    y <- y[!is.na(y)]
+    rlang::abort(
+      "`y` must not contain NA values. Remove NAs before calling this function.",
+      call = call
+    )
   }
   if (length(y) < 2L) {
     rlang::abort(
-      "`y` must contain at least 2 non-missing observations.",
+      "`y` must contain at least 2 observations.",
       call = call
     )
   }
@@ -102,6 +104,19 @@ validate_pit <- function(pit, call = rlang::caller_env()) {
   pit
 }
 
+# ── Scalar validation ────────────────────────────────────────────────────────
+
+#' @noRd
+validate_positive_scalar <- function(x, name, call = rlang::caller_env()) {
+  if (!is.numeric(x) || length(x) != 1L || is.na(x) || x < 0) {
+    rlang::abort(
+      paste0("`", name, "` must be a single non-negative number."),
+      call = call
+    )
+  }
+  invisible(x)
+}
+
 # ── Color helpers ─────────────────────────────────────────────────────────────
 
 #' @noRd
@@ -133,4 +148,3 @@ scales_label <- function(prob) {
   paste0(round(100 * prob), "%")
 }
 
-utils::globalVariables("density")

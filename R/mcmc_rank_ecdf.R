@@ -40,6 +40,9 @@
 #' where \eqn{I} is the number of iterations per chain, giving:
 #' \deqn{\varepsilon = \sqrt{\frac{\log(2/\alpha)}{2I}}}
 #'
+#' @seealso [bayesplot::mcmc_rank_overlay()] for rank histograms;
+#'   [bayesplot::mcmc_trace()] for trace plots.
+#'
 #' @references
 #' Vehtari, A., Gelman, A., Simpson, D., Carpenter, B., and Bürkner, P.-C.
 #' (2021). Rank-normalization, folding, and localization: An improved R-hat
@@ -140,7 +143,7 @@ mcmc_rank_ecdf <- function(x,
 
   epsilon  <- ecdf_simultaneous_band(n_iter, prob = prob)
   theo_seq <- seq(0, 1, length.out = 300)
-  band_df  <- data.frame(
+  band_df  <- tibble::tibble(
     theoretical = theo_seq,
     lower       = pmax(0, theo_seq - epsilon),
     upper       = pmin(1, theo_seq + epsilon)

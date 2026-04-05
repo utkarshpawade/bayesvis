@@ -77,3 +77,7 @@ Vehtari, A., Gelman, A., Simpson, D., Carpenter, B., and Bürkner, P.-C.
 for assessing convergence of MCMC (with discussion). \emph{Bayesian Analysis},
 16(2), 667--718. \doi{10.1214/20-BA1221}
 }
+\seealso{
+\code{\link[bayesplot:MCMC-traces]{bayesplot::mcmc_rank_overlay()}} for rank histograms;
+\code{\link[bayesplot:MCMC-traces]{bayesplot::mcmc_trace()}} for trace plots.
+}
