@@ -7,3 +7,6 @@
 ^revdep$
 ^data-raw$
 ^inst/doc$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

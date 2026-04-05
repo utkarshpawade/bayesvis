@@ -17,6 +17,9 @@ Description: An extension prototype for the 'bayesplot' package providing
     'bayesplot' themes and color schemes, making 'bayesvis' a natural companion
     to the 'bayesplot' workflow.
 License: GPL (>= 3)
+URL: https://utkarshpawade.github.io/bayesvis/,
+    https://github.com/utkarshpawade/bayesvis
+BugReports: https://github.com/utkarshpawade/bayesvis/issues
 Encoding: UTF-8
 LazyData: false
 Roxygen: list(markdown = TRUE)
